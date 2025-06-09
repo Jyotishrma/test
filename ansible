@@ -1,0 +1,130 @@
+**Ansible from Scratch - Beginner Guide**
+
+---
+
+**🛠️ What is Ansible?**
+
+Ansible is an open-source IT automation tool. It helps you:
+
+* Configure systems (install packages, change settings)
+* Deploy software
+* Orchestrate complex IT tasks (multi-machine workflows)
+
+---
+
+**✅ Why Use Ansible?**
+
+* Agentless (no software needed on managed nodes)
+* Uses simple YAML files (called playbooks)
+* SSH-based, secure and easy
+* Scales from one server to thousands
+
+---
+
+**🚀 How Ansible Works (Basic Flow)**
+
+1. You write instructions in YAML (`.yml`) files.
+2. Ansible connects to your remote servers via SSH.
+3. It executes tasks in the order you define.
+
+---
+
+**🔧 Basic Setup**
+
+**1. 📆 Install Ansible**
+
+**Ubuntu:**
+
+```bash
+sudo apt update
+sudo apt install ansible -y
+```
+
+**RHEL/CentOS:**
+
+```bash
+sudo yum install epel-release -y
+sudo yum install ansible -y
+```
+
+**2. 🧑‍💻 Create an Inventory File**
+
+Example (`hosts.ini`):
+
+```ini
+[webservers]
+192.168.1.10
+192.168.1.11
+
+[dbservers]
+db1.example.com
+```
+
+**3. 🔑 Ensure SSH Works**
+
+```bash
+ssh-copy-id user@192.168.1.10
+```
+
+**4. 📜 Write a Simple Playbook**
+
+Example (`hello.yml`):
+
+```yaml
+- name: Test connection
+  hosts: webservers
+  become: yes
+  tasks:
+    - name: Ping the server
+      ansible.builtin.ping:
+```
+
+Run it:
+
+```bash
+ansible-playbook -i hosts.ini hello.yml
+```
+
+---
+
+**📘 Common Modules**
+
+| Module      | Purpose                 |
+| ----------- | ----------------------- |
+| `ping`      | Check connection        |
+| `apt`/`yum` | Install packages        |
+| `copy`      | Copy files              |
+| `template`  | Deploy Jinja2 templates |
+| `service`   | Manage services         |
+| `shell`     | Run shell commands      |
+
+---
+
+**📦 Example: Install Nginx**
+
+```yaml
+- name: Install Nginx
+  hosts: webservers
+  become: yes
+  tasks:
+    - name: Install nginx
+      apt:
+        name: nginx
+        state: present
+        update_cache: yes
+
+    - name: Start nginx
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+```
+
+---
+
+**🧠 Learning Tips**
+
+* Start with one host and simple tasks
+* Use `ansible -m ping all -i hosts.ini` to test connections
+* Learn basic YAML syntax
+* Explore modules at [https://docs.ansible.com/ansible/latest/collections/index.html](https://docs.ansible.com/ansible/latest/collections/index.html)
